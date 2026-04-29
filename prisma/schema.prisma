@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum FormatNutrition {
+  LIQUIDE
+  POUDRE
+}
+
+model ParametresTechniques {
+  id Int @id @default(1)
+
+  designationAutorisee String
+
+  // Taux d'extrait sec (version liquide)
+  tauxExtraitSecMinPct Decimal @db.Decimal(5, 2)
+  tauxExtraitSecMaxPct Decimal @db.Decimal(5, 2)
+
+  // pH du produit
+  ph Decimal @db.Decimal(3, 1)
+
+  // Dosage recommande (en % du produit final / selon application)
+  dosageMinPct Decimal @db.Decimal(4, 2)
+  dosageMaxPct Decimal @db.Decimal(4, 2)
+
+  nutrition NutritionIndicateur[]
+}
+
+model NutritionIndicateur {
+  id Int @id @default(autoincrement())
+
+  format FormatNutrition
+
+  // Energie (kcal) et nutriments (pour 100g)
+  energieKcal Decimal @db.Decimal(6, 1)
+  proteinesG Decimal @db.Decimal(6, 2)
+  glucidesG Decimal @db.Decimal(6, 2)
+  dontSucresG Decimal @db.Decimal(6, 2)
+  lipidesG Decimal @db.Decimal(6, 2)
+  acidesGrasSaturesG Decimal @db.Decimal(6, 2)
+  selG Decimal @db.Decimal(6, 2)
+
+  // Oméga-3 (pour 100g)
+  omega3TotalG Decimal @db.Decimal(6, 2)
+  omega3EPA_G Decimal @db.Decimal(6, 2)
+  omega3DHA_G Decimal @db.Decimal(6, 2)
+
+  parametresTechniquesId Int
+  parametresTechniques ParametresTechniques @relation(fields: [parametresTechniquesId], references: [id])
+
+  @@unique([parametresTechniquesId, format])
+}
+

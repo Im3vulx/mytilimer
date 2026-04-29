@@ -1,15 +1,15 @@
 export const defaultFicheTechnique = {
   designationAutorisee: "Concentré de moule à 35%",
-  tauxExtraitSecMinPct: 35.0,
-  tauxExtraitSecMaxPct: 40.0,
+  tauxExtraitSecMinPct: 35,
+  tauxExtraitSecMaxPct: 40,
   ph: 6.4,
   dosageMinPct: 0.5,
-  dosageMaxPct: 4.0,
+  dosageMaxPct: 4,
   nutrition: [
     {
       format: "LIQUIDE",
       energieKcal: 107.5,
-      proteinesG: 17.0,
+      proteinesG: 17,
       glucidesG: 6.5,
       dontSucresG: 0.35,
       lipidesG: 1.6,
@@ -21,10 +21,10 @@ export const defaultFicheTechnique = {
     },
     {
       format: "POUDRE",
-      energieKcal: 327.0,
-      proteinesG: 52.0,
+      energieKcal: 327,
+      proteinesG: 52,
       glucidesG: 19.6,
-      dontSucresG: 1.0,
+      dontSucresG: 1,
       lipidesG: 4.7,
       acidesGrasSaturesG: 1.2,
       selG: 13.7,

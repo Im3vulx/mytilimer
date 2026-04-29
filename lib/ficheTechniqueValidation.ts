@@ -8,7 +8,7 @@ export const allowedDesignations = [
 
 export function parseNumber(value: unknown, fieldName: string): number {
   if (typeof value !== "number" || !Number.isFinite(value)) {
-    throw new Error(`Champ invalide: ${fieldName}`);
+    throw new TypeError(`Champ invalide: ${fieldName}`);
   }
   return value;
 }
@@ -21,7 +21,7 @@ export function validateFicheTechniquePayload(payload: unknown): FicheTechnique 
 
   const designationAutorisee = p.designationAutorisee;
   if (typeof designationAutorisee !== "string") {
-    throw new Error("designationAutorisee invalide");
+    throw new TypeError("designationAutorisee invalide");
   }
   if (!allowedDesignations.includes(designationAutorisee as (typeof allowedDesignations)[number])) {
     throw new Error("designationAutorisee non autorisee");

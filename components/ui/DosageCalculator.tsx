@@ -9,7 +9,7 @@ const MIN_TAUX = 0.5;
 const MAX_TAUX = 4;
 
 const DEFAULT_TAUX_BY_APP: Record<ApplicationType, number> = {
-  soupe: 1,
+  soupe: 1.0,
   sauce: 1.8,
   plat_cuise: 2.4,
 };

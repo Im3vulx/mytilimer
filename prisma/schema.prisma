@@ -55,3 +55,31 @@ model NutritionIndicateur {
   @@unique([parametresTechniquesId, format])
 }
 
+model ContactLead {
+  id          Int      @id @default(autoincrement())
+  companyName String
+  contactName String?
+  email       String
+  phone       String?
+  message     String
+  createdAt   DateTime @default(now())
+}
+
+model ClickEvent {
+  id        Int      @id @default(autoincrement())
+  xPct      Float
+  yPct      Float
+  page      String   @default("/")
+  type      String   @default("click")
+  createdAt DateTime @default(now())
+}
+
+model DosageCalcEvent {
+  id               Int      @id @default(autoincrement())
+  intensityId      String
+  poidsTotalKg     Float
+  taux             Float
+  masseConcentreKg Float
+  createdAt        DateTime @default(now())
+}
+

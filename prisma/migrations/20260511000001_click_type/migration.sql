@@ -1,0 +1,1 @@
+ALTER TABLE "ClickEvent" ADD COLUMN "type" TEXT NOT NULL DEFAULT 'click';

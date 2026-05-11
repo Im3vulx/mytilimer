@@ -1,26 +1,112 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Font tokens — inline: values never change at runtime */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-jakarta);
+  --font-display: var(--font-fraunces);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* Color tokens — NOT inline so Tailwind generates var() utilities (runtime overridable) */
+@theme {
+  --color-canvas: #0C0C58;
+  --color-surface: #0A0A50;
+  --color-brand: #F6DEB8;
+  --color-body: #F6F0E3;
+}
+
+/* Border, opacity and nav CSS vars — used as arbitrary values */
+:root {
+  --border-faint: rgba(246, 222, 184, 0.12);
+  --border-soft: rgba(246, 222, 184, 0.20);
+  --blob-opacity: 0.13;
+  --nav-bg: rgba(12, 12, 88, 0.90);
+}
+
+/* ── System light preference (no class needed, zero FOUC) ──── */
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-canvas: #F3EDE2;
+    --color-surface: #E9E2D4;
+    --color-brand: #1A1364;
+    --color-body: #2C2756;
+
+    --border-faint: rgba(26, 19, 100, 0.10);
+    --border-soft: rgba(26, 19, 100, 0.18);
+    --blob-opacity: 0.06;
+    --nav-bg: rgba(243, 237, 226, 0.92);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Explicit overrides (higher specificity — win over media query) */
+html.light {
+  --color-canvas: #F3EDE2;
+  --color-surface: #E9E2D4;
+  --color-brand: #1A1364;
+  --color-body: #2C2756;
+
+  --border-faint: rgba(26, 19, 100, 0.10);
+  --border-soft: rgba(26, 19, 100, 0.18);
+  --blob-opacity: 0.06;
+  --nav-bg: rgba(243, 237, 226, 0.92);
 }
+
+html.dark {
+  --color-canvas: #0C0C58;
+  --color-surface: #0A0A50;
+  --color-brand: #F6DEB8;
+  --color-body: #F6F0E3;
+
+  --border-faint: rgba(246, 222, 184, 0.12);
+  --border-soft: rgba(246, 222, 184, 0.20);
+  --blob-opacity: 0.13;
+  --nav-bg: rgba(12, 12, 88, 0.90);
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: clip; /* blobs extend beyond sections without causing horizontal scroll */
+}
+
+/* ── Animations ────────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-10px) rotate(0.8deg); }
+  66%       { transform: translateY(-5px) rotate(-0.5deg); }
+}
+
+@keyframes bubble-rise {
+  0%   { transform: translateY(0) scale(0.8);   opacity: 0; }
+  8%   { opacity: 0.55; }
+  88%  { opacity: 0.18; }
+  100% { transform: translateY(-110vh) scale(1.3); opacity: 0; }
+}
+
+@keyframes blob-drift {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  33%       { transform: scale(1.04) translate(8px, -7px); }
+  66%       { transform: scale(0.97) translate(-5px, 5px); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ripple-out {
+  0%   { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(2);   opacity: 0; }
+}
+
+@keyframes click-bubble {
+  0%   { opacity: 0.9; transform: translate(-50%, -50%) scale(0.4); }
+  100% { opacity: 0;   transform: translate(calc(-50% + var(--bdx, 0px)), calc(-50% - 110px)) scale(1.2); }
+}
+
+/* Logo swap per theme */
+.light-logo { display: none; }
+html.light .light-logo { display: block; }
+html.light .dark-logo { display: none; }

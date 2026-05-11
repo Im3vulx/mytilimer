@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getPrisma } from "@/lib/prisma";
 
 export type ContactB2BPayload = {
   companyName: string;
@@ -42,7 +43,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "message requis" }, { status: 400 });
     }
 
-    // Placeholder: ici on branchera un service (email, CRM, base de données, etc.).
+    const prisma = getPrisma();
+    await prisma.contactLead.create({
+      data: {
+        companyName,
+        contactName: body?.contactName ?? null,
+        email,
+        phone: body?.phone ?? null,
+        message,
+      },
+    });
+
     return NextResponse.json(
       {
         ok: true,

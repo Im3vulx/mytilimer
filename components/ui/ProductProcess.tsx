@@ -84,7 +84,7 @@ export function ProductProcess() {
             </p>
           </div>
           <a
-            href="/api/contact"
+            href="/contact"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-[#F6F0E3] px-5 py-3 text-sm font-semibold text-[#041326] transition hover:bg-[#FFF8E7]"
           >
             Parler a un expert

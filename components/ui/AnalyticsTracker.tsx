@@ -16,18 +16,25 @@ export function AnalyticsTracker({ page }: { page: string }) {
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      const xPct = e.clientX / window.innerWidth;
-      const pageH = document.documentElement.scrollHeight;
-      const yPct = pageH > 0 ? (e.clientY + window.scrollY) / pageH : e.clientY / window.innerHeight;
+  const xPct = Math.min(1, Math.max(0, e.clientX / window.innerWidth));
+      // Normalize Y against the heatmap design reference height so recorded
+      // events map correctly to the admin wireframe. The original page
+      // mockup was designed at ~2479px height and the canvas is scaled to
+      // 1080px in the admin heatmap. Using this reference keeps points
+      // consistent across different client viewport heights.
+      const DESIGN_PAGE_H = 2479; // px (design baseline)
+      const absoluteY = e.clientY + window.scrollY;
+  const yPct = Math.min(1, Math.max(0, absoluteY / DESIGN_PAGE_H));
       sendEvent(xPct, yPct, page, "click");
     };
 
     const handleMouseMove = (e: MouseEvent) => {
       if (hoverTimer.current) clearTimeout(hoverTimer.current);
       hoverTimer.current = setTimeout(() => {
-        const xPct = e.clientX / window.innerWidth;
-        const pageH = document.documentElement.scrollHeight;
-        const yPct = pageH > 0 ? (e.clientY + window.scrollY) / pageH : e.clientY / window.innerHeight;
+  const xPct = Math.min(1, Math.max(0, e.clientX / window.innerWidth));
+        const DESIGN_PAGE_H = 2479;
+        const absoluteY = e.clientY + window.scrollY;
+  const yPct = Math.min(1, Math.max(0, absoluteY / DESIGN_PAGE_H));
         sendEvent(xPct, yPct, page, "hover");
       }, 600);
     };

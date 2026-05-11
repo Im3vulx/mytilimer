@@ -24,4 +24,3 @@ export function getPrisma() {
   globalForPrisma.prisma = client;
   return client;
 }
-

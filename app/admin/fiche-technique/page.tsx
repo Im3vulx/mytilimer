@@ -1,10 +1,12 @@
 import { getOrCreateFicheTechnique } from "@/lib/ficheTechniqueRepo";
 import { FicheTechniqueAdminForm } from "@/components/ui/FicheTechniqueAdminForm";
+import { requireAuth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Page() {
+  await requireAuth();
   const fiche = await getOrCreateFicheTechnique();
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">

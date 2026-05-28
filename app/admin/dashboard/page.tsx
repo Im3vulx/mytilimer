@@ -1,6 +1,9 @@
 import { getPrisma } from "@/lib/prisma";
 import { HeatmapSection } from "./HeatmapSection";
-import { Activity, FileText, MousePointer, Users } from "lucide-react";
+import { Activity, FileText, LogOut, MousePointer, Users } from "lucide-react";
+import { requireAuth, SESSION_COOKIE } from "@/lib/auth";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -31,6 +34,14 @@ function batchBucket(kg: number) {
 const BUCKET_ORDER = ["< 5 kg", "5–20 kg", "20–100 kg", "> 100 kg"];
 
 export default async function AdminDashboard() {
+  await requireAuth();
+
+  async function logout() {
+    "use server";
+    (await cookies()).delete(SESSION_COOKIE);
+    redirect("/admin/login");
+  }
+
   const prisma = getPrisma();
 
   const [leads, events, dosageEvents] = await Promise.all([
@@ -69,13 +80,25 @@ export default async function AdminDashboard() {
       <div className="max-w-7xl mx-auto space-y-8">
 
         {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--color-brand)" }}>
-            Console Mytilimer
-          </h1>
-          <p className="text-sm mt-1 opacity-55" style={{ color: "var(--color-brand)" }}>
-            Données collectées en temps réel sur la vitrine B2B
-          </p>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--color-brand)" }}>
+              Console Mytilimer
+            </h1>
+            <p className="text-sm mt-1 opacity-55" style={{ color: "var(--color-brand)" }}>
+              Données collectées en temps réel sur la vitrine B2B
+            </p>
+          </div>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium transition-opacity hover:opacity-70 shrink-0"
+              style={{ border: "1px solid var(--border-soft)", color: "var(--color-brand)" }}
+            >
+              <LogOut size={13} />
+              Déconnexion
+            </button>
+          </form>
         </div>
 
         {/* Stat cards */}
